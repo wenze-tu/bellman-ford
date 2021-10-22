@@ -1,0 +1,92 @@
+import tkinter
+from tkinter import ttk
+class Graph:
+    def __init__(self):
+        self.vetrice_name=None
+        self.edge_num=None
+        self.node_num=None
+        self.edges=[]
+        self.comboxSrc=[]
+        self.comboxDst=[]
+        self.weights=[]
+        self.init_graph()
+        
+    def init_graph(self):
+        self.win=tkinter.Tk()
+        self.win.geometry('450x150')
+        self.win.title('设置图的点数和边数')
+        nodeLabel=tkinter.Label(self.win,text='点个数：')
+        edgeLabel=tkinter.Label(self.win,text='边个数：')
+        nodeLabel.grid(row=0,padx='10', pady='10')
+        edgeLabel.grid(row=1,padx='10', pady='10')
+        self.entryNodeNum=tkinter.Entry(self.win)
+        self.entryEdgeNum=tkinter.Entry(self.win)
+        self.entryNodeNum.grid(row=0, column=1)
+        self.entryEdgeNum.grid(row=1, column=1)
+        ok=tkinter.Button(self.win,text='确定',command=self.next)
+        ok.grid(row=2, column=1)
+        self.win.mainloop()
+        return
+
+    def next(self):
+        self.node_num=self.entryNodeNum.get()
+        self.edge_num=self.entryEdgeNum.get()
+        print('点个数为: %s\n边个数为: %s'%(self.node_num,self.edge_num))
+        self.win.destroy()
+        self.win=tkinter.Tk()   
+        self.win.title('设置边的顶点和权重')
+        self.node_name=['v'+str(i) for i in range(int(self.node_num))]
+        
+        label1=tkinter.Label(self.win,text='Src')
+        label2=tkinter.Label(self.win,text='Dst')
+        label3=tkinter.Label(self.win,text='Weight')
+        label1.grid(row=0,column=1)
+        label2.grid(row=0,column=2)
+        label3.grid(row=0,column=3)
+        
+        for i in range(int(self.edge_num)):
+            var1=tkinter.StringVar()
+            comboxSrc=ttk.Combobox(self.win,textvariable=var1,value=self.node_name,width=5)
+            comboxSrc.grid(row=i+1,column=1,padx=15,pady=2)
+            
+            var2=tkinter.StringVar()
+            comboxDst=ttk.Combobox(self.win,textvariable=var2,value=self.node_name,width=5)
+            comboxDst.grid(row=i+1,column=2,padx=15,pady=2)
+            
+            weight=tkinter.Entry(self.win,width=10)
+            weight.grid(row=i+1,column=3,padx=10,pady=2)
+                                                          
+            self.comboxSrc.append(comboxSrc)
+            self.comboxDst.append(comboxDst)
+            self.weights.append(weight)  
+        ok=tkinter.Button(self.win,text='确定',command=self.close)
+        ok.grid(row=int(self.edge_num)+2,column=2)
+        self.win.mainloop()
+    
+    def close(self):
+        print('Src\t\tDst\t\tWeight')
+        for i in range(int(self.edge_num)):
+            print(self.comboxSrc[i].get(),'\t   ',self.comboxDst[i].get(),'\t   ',float(self.weights[i].get()))
+            self.edges.append(Edge(self.comboxSrc[i].get(),self.comboxDst[i].get(),float(self.weights[i].get())))
+        self.win.destroy()
+    
+class Edge:
+    '''
+    initiate nodes and egdes to form a graph
+    '''
+    def __init__(self,src_node,dst_node,weight):
+        self.src_node=src_node
+        self.dst_node=dst_node
+        self.weight=weight
+    
+    def printf(self):
+        print(self.src_node,self.dst_node,self.weight)
+
+
+if __name__=='__main__':
+    #图形化界面
+    test=Graph()
+    source_node='v2'
+    bellman=BellmanFord(test.edges,test.node_name,source_node)
+
+     
