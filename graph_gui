@@ -86,7 +86,5 @@ class Edge:
 if __name__=='__main__':
     #图形化界面
     test=Graph()
-    source_node='v2'
-    bellman=BellmanFord(test.edges,test.node_name,source_node)
 
      
